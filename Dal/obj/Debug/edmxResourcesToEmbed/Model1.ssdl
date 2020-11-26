@@ -1,0 +1,308 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="IceCreamModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Categories">
+    <Key>
+      <PropertyRef Name="categoryId" />
+    </Key>
+    <Property Name="categoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="categoryName" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="categoryType" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="freeToppingsForSaucesAmount" Type="int" />
+    <Property Name="freeToppingsForOthersAmount" Type="int" />
+    <Property Name="active" Type="bit" Nullable="false" />
+    <Property Name="order" Type="int" Nullable="false" />
+    <Property Name="createDate" Type="datetime" />
+    <Property Name="updateDate" Type="datetime" />
+    <Property Name="image" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="Clients">
+    <Key>
+      <PropertyRef Name="clientId" />
+    </Key>
+    <Property Name="clientId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="firstName" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="lastName" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="phone" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="address" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="email" Type="nvarchar" MaxLength="40" Nullable="false" />
+    <Property Name="password" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="active" Type="bit" Nullable="false" />
+    <Property Name="createDate" Type="datetime" />
+    <Property Name="updateDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="DeliveriesTypes">
+    <Key>
+      <PropertyRef Name="deliveryTypeId" />
+    </Key>
+    <Property Name="deliveryTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="deliveryDescription" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="price" Type="float" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="orderId" />
+    </Key>
+    <Property Name="orderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="clientId" Type="int" Nullable="false" />
+    <Property Name="orderDate" Type="datetime" />
+    <Property Name="deliveryTypeId" Type="int" Nullable="false" />
+    <Property Name="finalPrice" Type="float" Nullable="false" />
+    <Property Name="createDate" Type="datetime" />
+    <Property Name="updateDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="OrderToProduct">
+    <Key>
+      <PropertyRef Name="OrderToProductId" />
+    </Key>
+    <Property Name="OrderToProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderId" Type="int" Nullable="false" />
+    <Property Name="productId" Type="int" Nullable="false" />
+    <Property Name="sizeId" Type="int" Nullable="false" />
+    <Property Name="price" Type="float" Nullable="false" />
+    <Property Name="servingPreference" Type="nvarchar" MaxLength="250" />
+  </EntityType>
+  <EntityType Name="OrderToProductTopping">
+    <Key>
+      <PropertyRef Name="orderToProductId" />
+      <PropertyRef Name="toppingId" />
+    </Key>
+    <Property Name="orderToProductId" Type="int" Nullable="false" />
+    <Property Name="toppingId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="productId" />
+    </Key>
+    <Property Name="productId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="productName" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="description" Type="nvarchar" MaxLength="30" />
+    <Property Name="categoryId" Type="int" Nullable="false" />
+    <Property Name="active" Type="bit" Nullable="false" />
+    <Property Name="order" Type="int" Nullable="false" />
+    <Property Name="createDate" Type="datetime" />
+    <Property Name="updateDate" Type="datetime" />
+    <Property Name="image" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="Sizes">
+    <Key>
+      <PropertyRef Name="sizeId" />
+    </Key>
+    <Property Name="sizeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="sizeName" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="categoryId" Type="int" Nullable="false" />
+    <Property Name="price" Type="float" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Toppings">
+    <Key>
+      <PropertyRef Name="toppingId" />
+    </Key>
+    <Property Name="toppingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="toppingName" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="categoryId" Type="int" Nullable="false" />
+    <Property Name="price" Type="float" Nullable="false" />
+    <Property Name="active" Type="bit" Nullable="false" />
+    <Property Name="order" Type="int" Nullable="false" />
+    <Property Name="createDate" Type="datetime" />
+    <Property Name="updateDate" Type="datetime" />
+    <Property Name="image" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="ToppingsForProduct">
+    <Key>
+      <PropertyRef Name="toppingForProductId" />
+    </Key>
+    <Property Name="toppingForProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="productCategoryId" Type="int" />
+    <Property Name="toppingCategoryId" Type="int" />
+  </EntityType>
+  <Association Name="CategoriesProducts">
+    <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+    <End Role="Products" Type="Self.Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="categoryId" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="categoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CategoriesToppings">
+    <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+    <End Role="Toppings" Type="Self.Toppings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="categoryId" />
+      </Principal>
+      <Dependent Role="Toppings">
+        <PropertyRef Name="categoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderToProduct_Orders">
+    <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+    <End Role="OrderToProduct" Type="Self.OrderToProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Orders">
+        <PropertyRef Name="orderId" />
+      </Principal>
+      <Dependent Role="OrderToProduct">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OrdersClients">
+    <End Role="Clients" Type="Self.Clients" Multiplicity="1" />
+    <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Clients">
+        <PropertyRef Name="clientId" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="clientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OrdersTypeShippers">
+    <End Role="DeliveriesTypes" Type="Self.DeliveriesTypes" Multiplicity="1" />
+    <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DeliveriesTypes">
+        <PropertyRef Name="deliveryTypeId" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="deliveryTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OrderToProductToppings_OrderToproduct">
+    <End Role="OrderToProduct" Type="Self.OrderToProduct" Multiplicity="1" />
+    <End Role="OrderToProductTopping" Type="Self.OrderToProductTopping" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrderToProduct">
+        <PropertyRef Name="OrderToProductId" />
+      </Principal>
+      <Dependent Role="OrderToProductTopping">
+        <PropertyRef Name="orderToProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OrderToProductToppings_Toppings">
+    <End Role="Toppings" Type="Self.Toppings" Multiplicity="1" />
+    <End Role="OrderToProductTopping" Type="Self.OrderToProductTopping" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Toppings">
+        <PropertyRef Name="toppingId" />
+      </Principal>
+      <Dependent Role="OrderToProductTopping">
+        <PropertyRef Name="toppingId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="SizesCategories">
+    <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+    <End Role="Sizes" Type="Self.Sizes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="categoryId" />
+      </Principal>
+      <Dependent Role="Sizes">
+        <PropertyRef Name="categoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ToppingsForProductProductsCategories">
+    <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+    <End Role="ToppingsForProduct" Type="Self.ToppingsForProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="categoryId" />
+      </Principal>
+      <Dependent Role="ToppingsForProduct">
+        <PropertyRef Name="productCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ToppingsForProductToppingsCategories">
+    <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+    <End Role="ToppingsForProduct" Type="Self.ToppingsForProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="categoryId" />
+      </Principal>
+      <Dependent Role="ToppingsForProduct">
+        <PropertyRef Name="toppingCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="GetCatgsToppingsForCatgProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="categoryProduct" Type="int" Mode="In" />
+  </Function>
+  <Function Name="GetProductById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="productId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="GetProductsByCatgId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="categoryId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="GetProductsCategories" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="GetSizesByCatgId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="categoryId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="GetToppingsById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="categoryId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="GetToppingsForCatgProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="categoryId" Type="int" Mode="In" />
+  </Function>
+  <EntityContainer Name="IceCreamModelStoreContainer">
+    <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Clients" EntityType="Self.Clients" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DeliveriesTypes" EntityType="Self.DeliveriesTypes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrderToProduct" EntityType="Self.OrderToProduct" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrderToProductTopping" EntityType="Self.OrderToProductTopping" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Sizes" EntityType="Self.Sizes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Toppings" EntityType="Self.Toppings" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ToppingsForProduct" EntityType="Self.ToppingsForProduct" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="CategoriesProducts" Association="Self.CategoriesProducts">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="CategoriesToppings" Association="Self.CategoriesToppings">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="Toppings" EntitySet="Toppings" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderToProduct_Orders" Association="Self.FK_OrderToProduct_Orders">
+      <End Role="Orders" EntitySet="Orders" />
+      <End Role="OrderToProduct" EntitySet="OrderToProduct" />
+    </AssociationSet>
+    <AssociationSet Name="OrdersClients" Association="Self.OrdersClients">
+      <End Role="Clients" EntitySet="Clients" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="OrdersTypeShippers" Association="Self.OrdersTypeShippers">
+      <End Role="DeliveriesTypes" EntitySet="DeliveriesTypes" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="OrderToProductToppings_OrderToproduct" Association="Self.OrderToProductToppings_OrderToproduct">
+      <End Role="OrderToProduct" EntitySet="OrderToProduct" />
+      <End Role="OrderToProductTopping" EntitySet="OrderToProductTopping" />
+    </AssociationSet>
+    <AssociationSet Name="OrderToProductToppings_Toppings" Association="Self.OrderToProductToppings_Toppings">
+      <End Role="Toppings" EntitySet="Toppings" />
+      <End Role="OrderToProductTopping" EntitySet="OrderToProductTopping" />
+    </AssociationSet>
+    <AssociationSet Name="SizesCategories" Association="Self.SizesCategories">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="Sizes" EntitySet="Sizes" />
+    </AssociationSet>
+    <AssociationSet Name="ToppingsForProductProductsCategories" Association="Self.ToppingsForProductProductsCategories">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="ToppingsForProduct" EntitySet="ToppingsForProduct" />
+    </AssociationSet>
+    <AssociationSet Name="ToppingsForProductToppingsCategories" Association="Self.ToppingsForProductToppingsCategories">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="ToppingsForProduct" EntitySet="ToppingsForProduct" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,410 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="IceCreamModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="categoryId" />
+    </Key>
+    <Property Name="categoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="categoryName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="categoryType" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="freeToppingsForSaucesAmount" Type="Int32" />
+    <Property Name="freeToppingsForOthersAmount" Type="Int32" />
+    <Property Name="active" Type="Boolean" Nullable="false" />
+    <Property Name="order" Type="Int32" Nullable="false" />
+    <Property Name="createDate" Type="DateTime" Precision="3" />
+    <Property Name="updateDate" Type="DateTime" Precision="3" />
+    <Property Name="image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Products" Relationship="Self.CategoriesProducts" FromRole="Categories" ToRole="Products" />
+    <NavigationProperty Name="Toppings" Relationship="Self.CategoriesToppings" FromRole="Categories" ToRole="Toppings" />
+    <NavigationProperty Name="Sizes" Relationship="Self.SizesCategories" FromRole="Categories" ToRole="Sizes" />
+    <NavigationProperty Name="ToppingsForProducts" Relationship="Self.ToppingsForProductProductsCategories" FromRole="Categories" ToRole="ToppingsForProduct" />
+    <NavigationProperty Name="ToppingsForProducts1" Relationship="Self.ToppingsForProductToppingsCategories" FromRole="Categories" ToRole="ToppingsForProduct" />
+  </EntityType>
+  <EntityType Name="Client">
+    <Key>
+      <PropertyRef Name="clientId" />
+    </Key>
+    <Property Name="clientId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="firstName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="lastName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="phone" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="address" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="active" Type="Boolean" Nullable="false" />
+    <Property Name="createDate" Type="DateTime" Precision="3" />
+    <Property Name="updateDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Orders" Relationship="Self.OrdersClients" FromRole="Clients" ToRole="Orders" />
+  </EntityType>
+  <EntityType Name="DeliveriesType">
+    <Key>
+      <PropertyRef Name="deliveryTypeId" />
+    </Key>
+    <Property Name="deliveryTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="deliveryDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="price" Type="Double" Nullable="false" />
+    <NavigationProperty Name="Orders" Relationship="Self.OrdersTypeShippers" FromRole="DeliveriesTypes" ToRole="Orders" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="orderId" />
+    </Key>
+    <Property Name="orderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="clientId" Type="Int32" Nullable="false" />
+    <Property Name="orderDate" Type="DateTime" Precision="3" />
+    <Property Name="deliveryTypeId" Type="Int32" Nullable="false" />
+    <Property Name="finalPrice" Type="Double" Nullable="false" />
+    <Property Name="createDate" Type="DateTime" Precision="3" />
+    <Property Name="updateDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Client" Relationship="Self.OrdersClients" FromRole="Orders" ToRole="Clients" />
+    <NavigationProperty Name="DeliveriesType" Relationship="Self.OrdersTypeShippers" FromRole="Orders" ToRole="DeliveriesTypes" />
+    <NavigationProperty Name="OrderToProducts" Relationship="IceCreamModel.FK_OrderToProduct_Orders" FromRole="Order" ToRole="OrderToProduct" />
+  </EntityType>
+  <EntityType Name="OrderToProduct">
+    <Key>
+      <PropertyRef Name="OrderToProductId" />
+    </Key>
+    <Property Name="OrderToProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrderId" Type="Int32" Nullable="false" />
+    <Property Name="productId" Type="Int32" Nullable="false" />
+    <Property Name="sizeId" Type="Int32" Nullable="false" />
+    <Property Name="price" Type="Double" Nullable="false" />
+    <Property Name="servingPreference" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Toppings" Relationship="Self.OrderToProductTopping" FromRole="OrderToProduct" ToRole="Toppings" />
+    <NavigationProperty Name="Order" Relationship="IceCreamModel.FK_OrderToProduct_Orders" FromRole="OrderToProduct" ToRole="Order" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="productId" />
+    </Key>
+    <Property Name="productId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="productName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="categoryId" Type="Int32" Nullable="false" />
+    <Property Name="active" Type="Boolean" Nullable="false" />
+    <Property Name="order" Type="Int32" Nullable="false" />
+    <Property Name="createDate" Type="DateTime" Precision="3" />
+    <Property Name="updateDate" Type="DateTime" Precision="3" />
+    <Property Name="image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Category" Relationship="Self.CategoriesProducts" FromRole="Products" ToRole="Categories" />
+  </EntityType>
+  <EntityType Name="Size">
+    <Key>
+      <PropertyRef Name="sizeId" />
+    </Key>
+    <Property Name="sizeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="sizeName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="categoryId" Type="Int32" Nullable="false" />
+    <Property Name="price" Type="Double" Nullable="false" />
+    <NavigationProperty Name="Category" Relationship="Self.SizesCategories" FromRole="Sizes" ToRole="Categories" />
+  </EntityType>
+  <EntityType Name="Topping">
+    <Key>
+      <PropertyRef Name="toppingId" />
+    </Key>
+    <Property Name="toppingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="toppingName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="categoryId" Type="Int32" Nullable="false" />
+    <Property Name="price" Type="Double" Nullable="false" />
+    <Property Name="active" Type="Boolean" Nullable="false" />
+    <Property Name="order" Type="Int32" Nullable="false" />
+    <Property Name="createDate" Type="DateTime" Precision="3" />
+    <Property Name="updateDate" Type="DateTime" Precision="3" />
+    <Property Name="image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Category" Relationship="Self.CategoriesToppings" FromRole="Toppings" ToRole="Categories" />
+    <NavigationProperty Name="OrderToProducts" Relationship="Self.OrderToProductTopping" FromRole="Toppings" ToRole="OrderToProduct" />
+  </EntityType>
+  <EntityType Name="ToppingsForProduct">
+    <Key>
+      <PropertyRef Name="toppingForProductId" />
+    </Key>
+    <Property Name="toppingForProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="productCategoryId" Type="Int32" />
+    <Property Name="toppingCategoryId" Type="Int32" />
+    <NavigationProperty Name="Category" Relationship="Self.ToppingsForProductProductsCategories" FromRole="ToppingsForProduct" ToRole="Categories" />
+    <NavigationProperty Name="Category1" Relationship="Self.ToppingsForProductToppingsCategories" FromRole="ToppingsForProduct" ToRole="Categories" />
+  </EntityType>
+  <Association Name="CategoriesProducts">
+    <End Role="Categories" Type="Self.Category" Multiplicity="1" />
+    <End Role="Products" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="categoryId" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="categoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CategoriesToppings">
+    <End Role="Categories" Type="Self.Category" Multiplicity="1" />
+    <End Role="Toppings" Type="Self.Topping" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="categoryId" />
+      </Principal>
+      <Dependent Role="Toppings">
+        <PropertyRef Name="categoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="SizesCategories">
+    <End Role="Categories" Type="Self.Category" Multiplicity="1" />
+    <End Role="Sizes" Type="Self.Size" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="categoryId" />
+      </Principal>
+      <Dependent Role="Sizes">
+        <PropertyRef Name="categoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ToppingsForProductProductsCategories">
+    <End Role="Categories" Type="Self.Category" Multiplicity="0..1" />
+    <End Role="ToppingsForProduct" Type="Self.ToppingsForProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="categoryId" />
+      </Principal>
+      <Dependent Role="ToppingsForProduct">
+        <PropertyRef Name="productCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ToppingsForProductToppingsCategories">
+    <End Role="Categories" Type="Self.Category" Multiplicity="0..1" />
+    <End Role="ToppingsForProduct" Type="Self.ToppingsForProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="categoryId" />
+      </Principal>
+      <Dependent Role="ToppingsForProduct">
+        <PropertyRef Name="toppingCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OrdersClients">
+    <End Role="Clients" Type="Self.Client" Multiplicity="1" />
+    <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Clients">
+        <PropertyRef Name="clientId" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="clientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OrdersTypeShippers">
+    <End Role="DeliveriesTypes" Type="Self.DeliveriesType" Multiplicity="1" />
+    <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DeliveriesTypes">
+        <PropertyRef Name="deliveryTypeId" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="deliveryTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OrderToProductTopping">
+    <End Role="OrderToProduct" Type="Self.OrderToProduct" Multiplicity="*" />
+    <End Role="Toppings" Type="Self.Topping" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="IceCreamEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Categories" EntityType="Self.Category" />
+    <EntitySet Name="Clients" EntityType="Self.Client" />
+    <EntitySet Name="DeliveriesTypes" EntityType="Self.DeliveriesType" />
+    <EntitySet Name="Orders" EntityType="Self.Order" />
+    <EntitySet Name="OrderToProducts" EntityType="Self.OrderToProduct" />
+    <EntitySet Name="Products" EntityType="Self.Product" />
+    <EntitySet Name="Sizes" EntityType="Self.Size" />
+    <EntitySet Name="Toppings" EntityType="Self.Topping" />
+    <EntitySet Name="ToppingsForProducts" EntityType="Self.ToppingsForProduct" />
+    <AssociationSet Name="CategoriesProducts" Association="Self.CategoriesProducts">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="CategoriesToppings" Association="Self.CategoriesToppings">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="Toppings" EntitySet="Toppings" />
+    </AssociationSet>
+    <AssociationSet Name="SizesCategories" Association="Self.SizesCategories">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="Sizes" EntitySet="Sizes" />
+    </AssociationSet>
+    <AssociationSet Name="ToppingsForProductProductsCategories" Association="Self.ToppingsForProductProductsCategories">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="ToppingsForProduct" EntitySet="ToppingsForProducts" />
+    </AssociationSet>
+    <AssociationSet Name="ToppingsForProductToppingsCategories" Association="Self.ToppingsForProductToppingsCategories">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="ToppingsForProduct" EntitySet="ToppingsForProducts" />
+    </AssociationSet>
+    <AssociationSet Name="OrdersClients" Association="Self.OrdersClients">
+      <End Role="Clients" EntitySet="Clients" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="OrdersTypeShippers" Association="Self.OrdersTypeShippers">
+      <End Role="DeliveriesTypes" EntitySet="DeliveriesTypes" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="OrderToProductTopping" Association="Self.OrderToProductTopping">
+      <End Role="OrderToProduct" EntitySet="OrderToProducts" />
+      <End Role="Toppings" EntitySet="Toppings" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderToProduct_Orders" Association="IceCreamModel.FK_OrderToProduct_Orders">
+      <End Role="Order" EntitySet="Orders" />
+      <End Role="OrderToProduct" EntitySet="OrderToProducts" />
+    </AssociationSet>
+    <FunctionImport Name="GetProductsCategories" ReturnType="Collection(IceCreamModel.GetProductsCategories_Result)" />
+    <FunctionImport Name="GetProductsCategoriesFun" EntitySet="Categories" ReturnType="Collection(IceCreamModel.Category)" />
+    <FunctionImport Name="GetProductsByCatgId" ReturnType="Collection(IceCreamModel.GetProductsByCatgId_Result)">
+      <Parameter Name="categoryId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetProductsByCatgIdFun" EntitySet="Products" ReturnType="Collection(IceCreamModel.Product)">
+      <Parameter Name="categoryId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetProductById" ReturnType="Collection(IceCreamModel.GetProductById_Result)">
+      <Parameter Name="productId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetProductByIdFun" EntitySet="Products" ReturnType="Collection(IceCreamModel.Product)">
+      <Parameter Name="productId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetCatgsToppingsForCatgProduct" ReturnType="Collection(IceCreamModel.GetCatgsToppingsForCatgProduct_Result1)">
+      <Parameter Name="categoryProduct" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetCatgsToppingsForCatgProductFun" EntitySet="Categories" ReturnType="Collection(IceCreamModel.Category)">
+      <Parameter Name="categoryProduct" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetToppingsById" ReturnType="Collection(IceCreamModel.GetToppingsById_Result)">
+      <Parameter Name="categoryId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetToppingsbyIdFun" EntitySet="Toppings" ReturnType="Collection(IceCreamModel.Topping)">
+      <Parameter Name="categoryId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetToppingsForCatgProduct" ReturnType="Collection(IceCreamModel.GetToppingsForCatgProduct_Result)">
+      <Parameter Name="categoryId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetToppingsForCatgProductFun" EntitySet="Toppings" ReturnType="Collection(IceCreamModel.Topping)">
+      <Parameter Name="categoryId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetSizesByCatgId" ReturnType="Collection(IceCreamModel.GetSizesByCatgId_Result)">
+      <Parameter Name="categoryId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetSizesByCatgIdFun" EntitySet="Sizes" ReturnType="Collection(IceCreamModel.Size)">
+      <Parameter Name="categoryId" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <Association Name="FK_OrderToProduct_Orders">
+    <End Type="IceCreamModel.Order" Role="Order" Multiplicity="1" />
+    <End Type="IceCreamModel.OrderToProduct" Role="OrderToProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="orderId" />
+      </Principal>
+      <Dependent Role="OrderToProduct">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="GetCategories_Result">
+    <Property Type="Int32" Name="categoryId" Nullable="false" />
+    <Property Type="String" Name="categoryName" Nullable="false" MaxLength="30" />
+    <Property Type="String" Name="categoryType" Nullable="false" MaxLength="30" />
+    <Property Type="Int32" Name="freeToppingsForSaucesAmount" Nullable="true" />
+    <Property Type="Int32" Name="freeToppingsForOthersAmount" Nullable="true" />
+    <Property Type="Boolean" Name="active" Nullable="false" />
+    <Property Type="Int32" Name="order" Nullable="false" />
+    <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="updateDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="image" Nullable="true" MaxLength="255" />
+  </ComplexType>
+  <ComplexType Name="GetProductsCategories_Result">
+    <Property Type="Int32" Name="categoryId" Nullable="false" />
+    <Property Type="String" Name="categoryName" Nullable="false" MaxLength="30" />
+    <Property Type="String" Name="categoryType" Nullable="false" MaxLength="30" />
+    <Property Type="Int32" Name="freeToppingsForSaucesAmount" Nullable="true" />
+    <Property Type="Int32" Name="freeToppingsForOthersAmount" Nullable="true" />
+    <Property Type="Boolean" Name="active" Nullable="false" />
+    <Property Type="Int32" Name="order" Nullable="false" />
+    <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="updateDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="image" Nullable="true" MaxLength="255" />
+  </ComplexType>
+  <ComplexType Name="GetProductsByCatgId_Result">
+    <Property Type="Int32" Name="productId" Nullable="false" />
+    <Property Type="String" Name="productName" Nullable="false" MaxLength="30" />
+    <Property Type="String" Name="description" Nullable="true" MaxLength="30" />
+    <Property Type="Int32" Name="categoryId" Nullable="false" />
+    <Property Type="Boolean" Name="active" Nullable="false" />
+    <Property Type="Int32" Name="order" Nullable="false" />
+    <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="updateDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="image" Nullable="true" MaxLength="255" />
+  </ComplexType>
+  <ComplexType Name="GetProductById_Result">
+    <Property Type="Int32" Name="productId" Nullable="false" />
+    <Property Type="String" Name="productName" Nullable="false" MaxLength="30" />
+    <Property Type="String" Name="description" Nullable="true" MaxLength="30" />
+    <Property Type="Int32" Name="categoryId" Nullable="false" />
+    <Property Type="Boolean" Name="active" Nullable="false" />
+    <Property Type="Int32" Name="order" Nullable="false" />
+    <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="updateDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="image" Nullable="true" MaxLength="255" />
+  </ComplexType>
+  <ComplexType Name="GetCatgsToppingsForCatgProduct_Result">
+    <Property Type="Int32" Name="categoryId" Nullable="false" />
+    <Property Type="String" Name="categoryName" Nullable="false" MaxLength="30" />
+    <Property Type="String" Name="categoryType" Nullable="false" MaxLength="30" />
+    <Property Type="Int32" Name="freeToppingsForSaucesAmount" Nullable="true" />
+    <Property Type="Int32" Name="freeToppingsForOthersAmount" Nullable="true" />
+    <Property Type="Boolean" Name="active" Nullable="false" />
+    <Property Type="Int32" Name="order" Nullable="false" />
+    <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="updateDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="image" Nullable="true" MaxLength="255" />
+  </ComplexType>
+  <ComplexType Name="GetCatgsToppingsForCatgProduct_Result1">
+    <Property Type="Int32" Name="categoryId" Nullable="false" />
+    <Property Type="String" Name="categoryName" Nullable="false" MaxLength="30" />
+    <Property Type="String" Name="categoryType" Nullable="false" MaxLength="30" />
+    <Property Type="Int32" Name="freeToppingsForSaucesAmount" Nullable="true" />
+    <Property Type="Int32" Name="freeToppingsForOthersAmount" Nullable="true" />
+    <Property Type="Boolean" Name="active" Nullable="false" />
+    <Property Type="Int32" Name="order" Nullable="false" />
+    <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="updateDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="image" Nullable="true" MaxLength="255" />
+  </ComplexType>
+  <ComplexType Name="GetToppingsById_Result">
+    <Property Type="Int32" Name="toppingId" Nullable="false" />
+    <Property Type="String" Name="toppingName" Nullable="false" MaxLength="30" />
+    <Property Type="Int32" Name="categoryId" Nullable="false" />
+    <Property Type="Double" Name="price" Nullable="false" />
+    <Property Type="Boolean" Name="active" Nullable="false" />
+    <Property Type="Int32" Name="order" Nullable="false" />
+    <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="updateDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="image" Nullable="true" MaxLength="255" />
+  </ComplexType>
+  <ComplexType Name="GetToppingsForCatgProduct_Result">
+    <Property Type="Int32" Name="toppingId" Nullable="false" />
+    <Property Type="String" Name="toppingName" Nullable="false" MaxLength="30" />
+    <Property Type="Int32" Name="categoryId" Nullable="false" />
+    <Property Type="Double" Name="price" Nullable="false" />
+    <Property Type="Boolean" Name="active" Nullable="false" />
+    <Property Type="Int32" Name="order" Nullable="false" />
+    <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="updateDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="image" Nullable="true" MaxLength="255" />
+  </ComplexType>
+  <ComplexType Name="GetSizesByCatgId_Result">
+    <Property Type="Int32" Name="sizeId" Nullable="false" />
+    <Property Type="String" Name="sizeName" Nullable="false" MaxLength="30" />
+    <Property Type="Int32" Name="categoryId" Nullable="false" />
+    <Property Type="Double" Name="price" Nullable="false" />
+  </ComplexType>
+</Schema>
