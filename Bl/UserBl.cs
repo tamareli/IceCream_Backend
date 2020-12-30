@@ -15,5 +15,20 @@ namespace Bl
             Client u = UserDto.ToDal(user);
             return UserDal.Register(u);
         }
+        public static UserDto ValidateUser(string email,string password)
+        {
+            Client u = UserDal.ValidateUser(email, password);
+            if(u !=null)
+               return new UserDto(u);
+            return null;
+        }
+        public static UserDto LogIn(int id)
+        {
+            Client u = UserDal.LogIn(id);
+            if (u != null)
+                return new UserDto(u);
+            return null;
+        }
+
     }
 }

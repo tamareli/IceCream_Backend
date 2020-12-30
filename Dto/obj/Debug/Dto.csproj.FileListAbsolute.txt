@@ -26,3 +26,17 @@ C:\Users\HOME\Desktop\IceCream_ServerSide\Dto\obj\Debug\Dto.csprojAssemblyRefere
 C:\Users\HOME\Desktop\IceCream_ServerSide\Dto\obj\Debug\Dto.csproj.CopyComplete
 C:\Users\HOME\Desktop\IceCream_ServerSide\Dto\obj\Debug\Dto.dll
 C:\Users\HOME\Desktop\IceCream_ServerSide\Dto\obj\Debug\Dto.pdb
+C:\Users\HOME\Desktop\IceCream_Backend\Dto\bin\Debug\Dto.dll.config
+C:\Users\HOME\Desktop\IceCream_Backend\Dto\bin\Debug\Dto.dll
+C:\Users\HOME\Desktop\IceCream_Backend\Dto\bin\Debug\Dto.pdb
+C:\Users\HOME\Desktop\IceCream_Backend\Dto\bin\Debug\Dal.dll
+C:\Users\HOME\Desktop\IceCream_Backend\Dto\bin\Debug\EntityFramework.dll
+C:\Users\HOME\Desktop\IceCream_Backend\Dto\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\HOME\Desktop\IceCream_Backend\Dto\bin\Debug\Dal.pdb
+C:\Users\HOME\Desktop\IceCream_Backend\Dto\bin\Debug\Dal.dll.config
+C:\Users\HOME\Desktop\IceCream_Backend\Dto\bin\Debug\EntityFramework.xml
+C:\Users\HOME\Desktop\IceCream_Backend\Dto\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\HOME\Desktop\IceCream_Backend\Dto\obj\Debug\Dto.csprojAssemblyReference.cache
+C:\Users\HOME\Desktop\IceCream_Backend\Dto\obj\Debug\Dto.csproj.CopyComplete
+C:\Users\HOME\Desktop\IceCream_Backend\Dto\obj\Debug\Dto.dll
+C:\Users\HOME\Desktop\IceCream_Backend\Dto\obj\Debug\Dto.pdb

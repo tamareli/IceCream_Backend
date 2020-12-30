@@ -18,10 +18,10 @@ namespace Dal
         public Category()
         {
             this.Products = new HashSet<Product>();
-            this.Toppings = new HashSet<Topping>();
             this.Sizes = new HashSet<Size>();
             this.ToppingsForProducts = new HashSet<ToppingsForProduct>();
             this.ToppingsForProducts1 = new HashSet<ToppingsForProduct>();
+            this.Toppings = new HashSet<Topping>();
         }
     
         public int categoryId { get; set; }
@@ -38,12 +38,12 @@ namespace Dal
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product> Products { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Topping> Toppings { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Size> Sizes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ToppingsForProduct> ToppingsForProducts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ToppingsForProduct> ToppingsForProducts1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Topping> Toppings { get; set; }
     }
 }

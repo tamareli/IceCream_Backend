@@ -21,5 +21,17 @@ namespace IceCream_Back.Controllers
                 return Ok();
             return BadRequest();
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("login/{id}")]
+        public IHttpActionResult LogIn(int id)
+        {
+            var user = UserBl.LogIn(id);
+            if (user != null)
+                return Ok(user);
+            else
+                return BadRequest();
+        }
     }
 }

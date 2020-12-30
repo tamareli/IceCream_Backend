@@ -10,6 +10,7 @@ using Bl;
 
 namespace IceCream_Back.Controllers
 {
+    
     [RoutePrefix("api/category")]
     public class CategoryController : ApiController
     {
@@ -31,6 +32,16 @@ namespace IceCream_Back.Controllers
             var categories = CategoryBl.GetCatgsToppingsForCatgProduct(id);
             if (categories != null)
                 return Ok(categories);
+            else
+                return BadRequest();
+        }
+        [HttpGet]
+        [Route("category/{id}")]
+        public IHttpActionResult GetCategoryById(int id)
+        {
+            var category = CategoryBl.GetCategory(id);
+            if (category != null)
+                return Ok(category);
             else
                 return BadRequest();
         }

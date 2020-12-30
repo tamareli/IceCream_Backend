@@ -12,7 +12,7 @@ namespace Dal
         {
             using (IceCreamEntities db = new IceCreamEntities())
             {
-                var toppings = db.GetToppingsbyIdFun(catgId);
+                var toppings = db.GetToppingsByIdFun(catgId);
                 return toppings.ToList<Topping>();
             }
         }

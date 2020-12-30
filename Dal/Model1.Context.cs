@@ -31,11 +31,12 @@ namespace Dal
         public virtual DbSet<Client> Clients { get; set; }
         public virtual DbSet<DeliveriesType> DeliveriesTypes { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
-        public virtual DbSet<OrderToProduct> OrderToProducts { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Size> Sizes { get; set; }
-        public virtual DbSet<Topping> Toppings { get; set; }
         public virtual DbSet<ToppingsForProduct> ToppingsForProducts { get; set; }
+        public virtual DbSet<Topping> Toppings { get; set; }
+        public virtual DbSet<OrderToProduct> OrderToProducts { get; set; }
+        public virtual DbSet<OrderToProductTopping> OrderToProductToppings { get; set; }
     
         public virtual ObjectResult<GetProductsCategories_Result> GetProductsCategories()
         {
@@ -133,33 +134,6 @@ namespace Dal
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Category>("GetCatgsToppingsForCatgProductFun", mergeOption, categoryProductParameter);
         }
     
-        public virtual ObjectResult<GetToppingsById_Result> GetToppingsById(Nullable<int> categoryId)
-        {
-            var categoryIdParameter = categoryId.HasValue ?
-                new ObjectParameter("categoryId", categoryId) :
-                new ObjectParameter("categoryId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetToppingsById_Result>("GetToppingsById", categoryIdParameter);
-        }
-    
-        public virtual ObjectResult<Topping> GetToppingsbyIdFun(Nullable<int> categoryId)
-        {
-            var categoryIdParameter = categoryId.HasValue ?
-                new ObjectParameter("categoryId", categoryId) :
-                new ObjectParameter("categoryId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Topping>("GetToppingsbyIdFun", categoryIdParameter);
-        }
-    
-        public virtual ObjectResult<Topping> GetToppingsbyIdFun(Nullable<int> categoryId, MergeOption mergeOption)
-        {
-            var categoryIdParameter = categoryId.HasValue ?
-                new ObjectParameter("categoryId", categoryId) :
-                new ObjectParameter("categoryId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Topping>("GetToppingsbyIdFun", mergeOption, categoryIdParameter);
-        }
-    
         public virtual ObjectResult<GetToppingsForCatgProduct_Result> GetToppingsForCatgProduct(Nullable<int> categoryId)
         {
             var categoryIdParameter = categoryId.HasValue ?
@@ -167,24 +141,6 @@ namespace Dal
                 new ObjectParameter("categoryId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetToppingsForCatgProduct_Result>("GetToppingsForCatgProduct", categoryIdParameter);
-        }
-    
-        public virtual ObjectResult<Topping> GetToppingsForCatgProductFun(Nullable<int> categoryId)
-        {
-            var categoryIdParameter = categoryId.HasValue ?
-                new ObjectParameter("categoryId", categoryId) :
-                new ObjectParameter("categoryId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Topping>("GetToppingsForCatgProductFun", categoryIdParameter);
-        }
-    
-        public virtual ObjectResult<Topping> GetToppingsForCatgProductFun(Nullable<int> categoryId, MergeOption mergeOption)
-        {
-            var categoryIdParameter = categoryId.HasValue ?
-                new ObjectParameter("categoryId", categoryId) :
-                new ObjectParameter("categoryId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Topping>("GetToppingsForCatgProductFun", mergeOption, categoryIdParameter);
         }
     
         public virtual ObjectResult<GetSizesByCatgId_Result> GetSizesByCatgId(Nullable<int> categoryId)
@@ -212,6 +168,93 @@ namespace Dal
                 new ObjectParameter("categoryId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Size>("GetSizesByCatgIdFun", mergeOption, categoryIdParameter);
+        }
+    
+        public virtual ObjectResult<GetCategory_Result> GetCategory(Nullable<int> categoryId)
+        {
+            var categoryIdParameter = categoryId.HasValue ?
+                new ObjectParameter("categoryId", categoryId) :
+                new ObjectParameter("categoryId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCategory_Result>("GetCategory", categoryIdParameter);
+        }
+    
+        public virtual ObjectResult<Category> GetCategoryFun(Nullable<int> categoryId)
+        {
+            var categoryIdParameter = categoryId.HasValue ?
+                new ObjectParameter("categoryId", categoryId) :
+                new ObjectParameter("categoryId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Category>("GetCategoryFun", categoryIdParameter);
+        }
+    
+        public virtual ObjectResult<Category> GetCategoryFun(Nullable<int> categoryId, MergeOption mergeOption)
+        {
+            var categoryIdParameter = categoryId.HasValue ?
+                new ObjectParameter("categoryId", categoryId) :
+                new ObjectParameter("categoryId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Category>("GetCategoryFun", mergeOption, categoryIdParameter);
+        }
+    
+        public virtual ObjectResult<GetDeliveryTypes_Result> GetDeliveryTypes()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDeliveryTypes_Result>("GetDeliveryTypes");
+        }
+    
+        public virtual ObjectResult<DeliveriesType> GetDeliveryTypesFun()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DeliveriesType>("GetDeliveryTypesFun");
+        }
+    
+        public virtual ObjectResult<DeliveriesType> GetDeliveryTypesFun(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DeliveriesType>("GetDeliveryTypesFun", mergeOption);
+        }
+    
+        public virtual ObjectResult<GetToppingsById_Result1> GetToppingsById(Nullable<int> categoryId)
+        {
+            var categoryIdParameter = categoryId.HasValue ?
+                new ObjectParameter("categoryId", categoryId) :
+                new ObjectParameter("categoryId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetToppingsById_Result1>("GetToppingsById", categoryIdParameter);
+        }
+    
+        public virtual ObjectResult<Topping> GetToppingsByIdFun(Nullable<int> categoryId)
+        {
+            var categoryIdParameter = categoryId.HasValue ?
+                new ObjectParameter("categoryId", categoryId) :
+                new ObjectParameter("categoryId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Topping>("GetToppingsByIdFun", categoryIdParameter);
+        }
+    
+        public virtual ObjectResult<Topping> GetToppingsByIdFun(Nullable<int> categoryId, MergeOption mergeOption)
+        {
+            var categoryIdParameter = categoryId.HasValue ?
+                new ObjectParameter("categoryId", categoryId) :
+                new ObjectParameter("categoryId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Topping>("GetToppingsByIdFun", mergeOption, categoryIdParameter);
+        }
+    
+        public virtual ObjectResult<Topping> GetToppingsForCatgProductFun(Nullable<int> categoryId)
+        {
+            var categoryIdParameter = categoryId.HasValue ?
+                new ObjectParameter("categoryId", categoryId) :
+                new ObjectParameter("categoryId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Topping>("GetToppingsForCatgProductFun", categoryIdParameter);
+        }
+    
+        public virtual ObjectResult<Topping> GetToppingsForCatgProductFun(Nullable<int> categoryId, MergeOption mergeOption)
+        {
+            var categoryIdParameter = categoryId.HasValue ?
+                new ObjectParameter("categoryId", categoryId) :
+                new ObjectParameter("categoryId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Topping>("GetToppingsForCatgProductFun", mergeOption, categoryIdParameter);
         }
     }
 }

@@ -26,5 +26,14 @@ namespace Dal
                 return categories.ToList<Category>();
             }
         }
+        public static Category GetCategory(int id)
+        {
+            using (IceCreamEntities db = new IceCreamEntities())
+            {
+
+                var category = db.GetCategoryFun(id);
+                return category.FirstOrDefault();
+            }
+        }
     }
 }

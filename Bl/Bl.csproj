@@ -53,6 +53,10 @@
   <ItemGroup>
     <Compile Include="CategoryBl.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="DeliveryTypesBl.cs" />
+    <Compile Include="OrderBl.cs" />
+    <Compile Include="OrderToProductBl.cs" />
+    <Compile Include="OrderToProductToToppingBl.cs" />
     <Compile Include="ProductBl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SizeBl.cs" />

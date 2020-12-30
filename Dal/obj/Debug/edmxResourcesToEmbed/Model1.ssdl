@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="IceCreamModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="IceCreamModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="Categories">
     <Key>
       <PropertyRef Name="categoryId" />
@@ -59,7 +59,7 @@
     <Property Name="productId" Type="int" Nullable="false" />
     <Property Name="sizeId" Type="int" Nullable="false" />
     <Property Name="price" Type="float" Nullable="false" />
-    <Property Name="servingPreference" Type="nvarchar" MaxLength="250" />
+    <Property Name="amount" Type="int" />
   </EntityType>
   <EntityType Name="OrderToProductTopping">
     <Key>
@@ -68,6 +68,8 @@
     </Key>
     <Property Name="orderToProductId" Type="int" Nullable="false" />
     <Property Name="toppingId" Type="int" Nullable="false" />
+    <Property Name="price" Type="float" />
+    <Property Name="amount" Type="int" />
   </EntityType>
   <EntityType Name="Products">
     <Key>
@@ -99,6 +101,7 @@
     <Property Name="toppingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="toppingName" Type="nvarchar" MaxLength="30" Nullable="false" />
     <Property Name="categoryId" Type="int" Nullable="false" />
+    <Property Name="categoryType" Type="nvarchar" MaxLength="50" />
     <Property Name="price" Type="float" Nullable="false" />
     <Property Name="active" Type="bit" Nullable="false" />
     <Property Name="order" Type="int" Nullable="false" />
@@ -147,6 +150,18 @@
       </Principal>
       <Dependent Role="OrderToProduct">
         <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderToProduct_Product">
+    <End Role="Products" Type="Self.Products" Multiplicity="1" />
+    <End Role="OrderToProduct" Type="Self.OrderToProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="productId" />
+      </Principal>
+      <Dependent Role="OrderToProduct">
+        <PropertyRef Name="productId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -234,9 +249,13 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="GetCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="categoryId" Type="int" Mode="In" />
+  </Function>
   <Function Name="GetCatgsToppingsForCatgProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="categoryProduct" Type="int" Mode="In" />
   </Function>
+  <Function Name="GetDeliveryTypes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="GetProductById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="productId" Type="int" Mode="In" />
   </Function>
@@ -274,6 +293,10 @@
     </AssociationSet>
     <AssociationSet Name="FK_OrderToProduct_Orders" Association="Self.FK_OrderToProduct_Orders">
       <End Role="Orders" EntitySet="Orders" />
+      <End Role="OrderToProduct" EntitySet="OrderToProduct" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderToProduct_Product" Association="Self.FK_OrderToProduct_Product">
+      <End Role="Products" EntitySet="Products" />
       <End Role="OrderToProduct" EntitySet="OrderToProduct" />
     </AssociationSet>
     <AssociationSet Name="OrdersClients" Association="Self.OrdersClients">

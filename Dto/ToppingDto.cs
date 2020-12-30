@@ -12,6 +12,7 @@ namespace Dto
         public int toppingId { get; set; }
         public string toppingName { get; set; }
         public int categoryId { get; set; }
+        public string categoryType { get; set; }
         public double price { get; set; }
         public bool active { get; set; }
         public int order { get; set; }
@@ -24,6 +25,7 @@ namespace Dto
             toppingId = t.toppingId;
             toppingName = t.toppingName;
             categoryId = t.categoryId;
+            categoryType = t.categoryType;
             price = t.price;
             active = t.active;
             order = t.order;

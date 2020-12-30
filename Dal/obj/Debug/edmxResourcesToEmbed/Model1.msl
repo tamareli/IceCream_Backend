@@ -55,18 +55,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="OrderToProducts">
-      <EntityTypeMapping TypeName="IceCreamModel.OrderToProduct">
-        <MappingFragment StoreEntitySet="OrderToProduct">
-          <ScalarProperty Name="OrderToProductId" ColumnName="OrderToProductId" />
-          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-          <ScalarProperty Name="productId" ColumnName="productId" />
-          <ScalarProperty Name="sizeId" ColumnName="sizeId" />
-          <ScalarProperty Name="price" ColumnName="price" />
-          <ScalarProperty Name="servingPreference" ColumnName="servingPreference" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Products">
       <EntityTypeMapping TypeName="IceCreamModel.Product">
         <MappingFragment StoreEntitySet="Products">
@@ -92,21 +80,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Toppings">
-      <EntityTypeMapping TypeName="IceCreamModel.Topping">
-        <MappingFragment StoreEntitySet="Toppings">
-          <ScalarProperty Name="toppingId" ColumnName="toppingId" />
-          <ScalarProperty Name="toppingName" ColumnName="toppingName" />
-          <ScalarProperty Name="categoryId" ColumnName="categoryId" />
-          <ScalarProperty Name="price" ColumnName="price" />
-          <ScalarProperty Name="active" ColumnName="active" />
-          <ScalarProperty Name="order" ColumnName="order" />
-          <ScalarProperty Name="createDate" ColumnName="createDate" />
-          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
-          <ScalarProperty Name="image" ColumnName="image" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="ToppingsForProducts">
       <EntityTypeMapping TypeName="IceCreamModel.ToppingsForProduct">
         <MappingFragment StoreEntitySet="ToppingsForProduct">
@@ -116,14 +89,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="OrderToProductTopping" TypeName="IceCreamModel.OrderToProductTopping" StoreEntitySet="OrderToProductTopping">
-      <EndProperty Name="OrderToProduct">
-        <ScalarProperty Name="OrderToProductId" ColumnName="orderToProductId" />
-      </EndProperty>
-      <EndProperty Name="Toppings">
-        <ScalarProperty Name="toppingId" ColumnName="toppingId" />
-      </EndProperty>
-    </AssociationSetMapping>
     <FunctionImportMapping FunctionImportName="GetProductsCategories" FunctionName="IceCreamModel.Store.GetProductsCategories">
       <ResultMapping>
         <ComplexTypeMapping TypeName="IceCreamModel.GetProductsCategories_Result">
@@ -190,22 +155,6 @@
       </ResultMapping>
     </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="GetCatgsToppingsForCatgProductFun" FunctionName="IceCreamModel.Store.GetCatgsToppingsForCatgProduct" />
-    <FunctionImportMapping FunctionImportName="GetToppingsById" FunctionName="IceCreamModel.Store.GetToppingsById">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="IceCreamModel.GetToppingsById_Result">
-          <ScalarProperty Name="toppingId" ColumnName="toppingId" />
-          <ScalarProperty Name="toppingName" ColumnName="toppingName" />
-          <ScalarProperty Name="categoryId" ColumnName="categoryId" />
-          <ScalarProperty Name="price" ColumnName="price" />
-          <ScalarProperty Name="active" ColumnName="active" />
-          <ScalarProperty Name="order" ColumnName="order" />
-          <ScalarProperty Name="createDate" ColumnName="createDate" />
-          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
-          <ScalarProperty Name="image" ColumnName="image" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="GetToppingsbyIdFun" FunctionName="IceCreamModel.Store.GetToppingsById" />
     <FunctionImportMapping FunctionImportName="GetToppingsForCatgProduct" FunctionName="IceCreamModel.Store.GetToppingsForCatgProduct">
       <ResultMapping>
         <ComplexTypeMapping TypeName="IceCreamModel.GetToppingsForCatgProduct_Result">
@@ -221,7 +170,6 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="GetToppingsForCatgProductFun" FunctionName="IceCreamModel.Store.GetToppingsForCatgProduct" />
     <FunctionImportMapping FunctionImportName="GetSizesByCatgId" FunctionName="IceCreamModel.Store.GetSizesByCatgId">
       <ResultMapping>
         <ComplexTypeMapping TypeName="IceCreamModel.GetSizesByCatgId_Result">
@@ -233,5 +181,88 @@
       </ResultMapping>
     </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="GetSizesByCatgIdFun" FunctionName="IceCreamModel.Store.GetSizesByCatgId" />
+    <FunctionImportMapping FunctionImportName="GetCategory" FunctionName="IceCreamModel.Store.GetCategory">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="IceCreamModel.GetCategory_Result">
+          <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+          <ScalarProperty Name="categoryName" ColumnName="categoryName" />
+          <ScalarProperty Name="categoryType" ColumnName="categoryType" />
+          <ScalarProperty Name="freeToppingsForSaucesAmount" ColumnName="freeToppingsForSaucesAmount" />
+          <ScalarProperty Name="freeToppingsForOthersAmount" ColumnName="freeToppingsForOthersAmount" />
+          <ScalarProperty Name="active" ColumnName="active" />
+          <ScalarProperty Name="order" ColumnName="order" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="image" ColumnName="image" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetCategoryFun" FunctionName="IceCreamModel.Store.GetCategory" />
+    <FunctionImportMapping FunctionImportName="GetDeliveryTypes" FunctionName="IceCreamModel.Store.GetDeliveryTypes">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="IceCreamModel.GetDeliveryTypes_Result">
+          <ScalarProperty Name="deliveryTypeId" ColumnName="deliveryTypeId" />
+          <ScalarProperty Name="deliveryDescription" ColumnName="deliveryDescription" />
+          <ScalarProperty Name="price" ColumnName="price" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetDeliveryTypesFun" FunctionName="IceCreamModel.Store.GetDeliveryTypes" />
+    <EntitySetMapping Name="Toppings">
+      <EntityTypeMapping TypeName="IceCreamModel.Topping">
+        <MappingFragment StoreEntitySet="Toppings">
+          <ScalarProperty Name="image" ColumnName="image" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="order" ColumnName="order" />
+          <ScalarProperty Name="active" ColumnName="active" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="categoryType" ColumnName="categoryType" />
+          <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+          <ScalarProperty Name="toppingName" ColumnName="toppingName" />
+          <ScalarProperty Name="toppingId" ColumnName="toppingId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="GetToppingsById" FunctionName="IceCreamModel.Store.GetToppingsById">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="IceCreamModel.GetToppingsById_Result1">
+          <ScalarProperty Name="toppingId" ColumnName="toppingId" />
+          <ScalarProperty Name="toppingName" ColumnName="toppingName" />
+          <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+          <ScalarProperty Name="categoryType" ColumnName="categoryType" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="active" ColumnName="active" />
+          <ScalarProperty Name="order" ColumnName="order" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="image" ColumnName="image" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetToppingsByIdFun" FunctionName="IceCreamModel.Store.GetToppingsById" />
+    <FunctionImportMapping FunctionImportName="GetToppingsForCatgProductFun" FunctionName="IceCreamModel.Store.GetToppingsForCatgProduct" />
+    <EntitySetMapping Name="OrderToProducts">
+      <EntityTypeMapping TypeName="IceCreamModel.OrderToProduct">
+        <MappingFragment StoreEntitySet="OrderToProduct">
+          <ScalarProperty Name="amount" ColumnName="amount" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="sizeId" ColumnName="sizeId" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="OrderToProductId" ColumnName="OrderToProductId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderToProductToppings">
+      <EntityTypeMapping TypeName="IceCreamModel.OrderToProductTopping">
+        <MappingFragment StoreEntitySet="OrderToProductTopping">
+          <ScalarProperty Name="amount" ColumnName="amount" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="toppingId" ColumnName="toppingId" />
+          <ScalarProperty Name="orderToProductId" ColumnName="orderToProductId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

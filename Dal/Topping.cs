@@ -17,12 +17,13 @@ namespace Dal
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Topping()
         {
-            this.OrderToProducts = new HashSet<OrderToProduct>();
+            this.OrderToProductToppings = new HashSet<OrderToProductTopping>();
         }
     
         public int toppingId { get; set; }
         public string toppingName { get; set; }
         public int categoryId { get; set; }
+        public string categoryType { get; set; }
         public double price { get; set; }
         public bool active { get; set; }
         public int order { get; set; }
@@ -32,6 +33,6 @@ namespace Dal
     
         public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrderToProduct> OrderToProducts { get; set; }
+        public virtual ICollection<OrderToProductTopping> OrderToProductToppings { get; set; }
     }
 }

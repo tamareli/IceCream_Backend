@@ -32,6 +32,13 @@ namespace Bl
             }
             return dtoCategories;
         }
+        public static CategoryDto GetCategory(int id)
+        {
+            Category category = CategoryDal.GetCategory(id);
+            CategoryDto dtoCategory = new CategoryDto(category);
+            //converting Dal Object to Dto
+            return dtoCategory;
+        }
 
     }
 }

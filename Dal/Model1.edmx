@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="IceCreamModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="IceCreamModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Categories">
           <Key>
             <PropertyRef Name="categoryId" />
@@ -64,7 +64,7 @@
           <Property Name="productId" Type="int" Nullable="false" />
           <Property Name="sizeId" Type="int" Nullable="false" />
           <Property Name="price" Type="float" Nullable="false" />
-          <Property Name="servingPreference" Type="nvarchar" MaxLength="250" />
+          <Property Name="amount" Type="int" />
         </EntityType>
         <EntityType Name="OrderToProductTopping">
           <Key>
@@ -73,6 +73,8 @@
           </Key>
           <Property Name="orderToProductId" Type="int" Nullable="false" />
           <Property Name="toppingId" Type="int" Nullable="false" />
+          <Property Name="price" Type="float" />
+          <Property Name="amount" Type="int" />
         </EntityType>
         <EntityType Name="Products">
           <Key>
@@ -104,6 +106,7 @@
           <Property Name="toppingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="toppingName" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="categoryId" Type="int" Nullable="false" />
+          <Property Name="categoryType" Type="nvarchar" MaxLength="50" />
           <Property Name="price" Type="float" Nullable="false" />
           <Property Name="active" Type="bit" Nullable="false" />
           <Property Name="order" Type="int" Nullable="false" />
@@ -152,6 +155,18 @@
             </Principal>
             <Dependent Role="OrderToProduct">
               <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderToProduct_Product">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="OrderToProduct" Type="Self.OrderToProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="productId" />
+            </Principal>
+            <Dependent Role="OrderToProduct">
+              <PropertyRef Name="productId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -239,9 +254,13 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="GetCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="categoryId" Type="int" Mode="In" />
+        </Function>
         <Function Name="GetCatgsToppingsForCatgProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="categoryProduct" Type="int" Mode="In" />
         </Function>
+        <Function Name="GetDeliveryTypes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetProductById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="productId" Type="int" Mode="In" />
         </Function>
@@ -279,6 +298,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_OrderToProduct_Orders" Association="Self.FK_OrderToProduct_Orders">
             <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderToProduct" EntitySet="OrderToProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderToProduct_Product" Association="Self.FK_OrderToProduct_Product">
+            <End Role="Products" EntitySet="Products" />
             <End Role="OrderToProduct" EntitySet="OrderToProduct" />
           </AssociationSet>
           <AssociationSet Name="OrdersClients" Association="Self.OrdersClients">
@@ -329,10 +352,10 @@
           <Property Name="updateDate" Type="DateTime" Precision="3" />
           <Property Name="image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Products" Relationship="Self.CategoriesProducts" FromRole="Categories" ToRole="Products" />
-          <NavigationProperty Name="Toppings" Relationship="Self.CategoriesToppings" FromRole="Categories" ToRole="Toppings" />
           <NavigationProperty Name="Sizes" Relationship="Self.SizesCategories" FromRole="Categories" ToRole="Sizes" />
           <NavigationProperty Name="ToppingsForProducts" Relationship="Self.ToppingsForProductProductsCategories" FromRole="Categories" ToRole="ToppingsForProduct" />
           <NavigationProperty Name="ToppingsForProducts1" Relationship="Self.ToppingsForProductToppingsCategories" FromRole="Categories" ToRole="ToppingsForProduct" />
+          <NavigationProperty Name="Toppings" Relationship="IceCreamModel.CategoriesToppings" FromRole="Category" ToRole="Topping" />
         </EntityType>
         <EntityType Name="Client">
           <Key>
@@ -374,19 +397,6 @@
           <NavigationProperty Name="DeliveriesType" Relationship="Self.OrdersTypeShippers" FromRole="Orders" ToRole="DeliveriesTypes" />
           <NavigationProperty Name="OrderToProducts" Relationship="IceCreamModel.FK_OrderToProduct_Orders" FromRole="Order" ToRole="OrderToProduct" />
         </EntityType>
-        <EntityType Name="OrderToProduct">
-          <Key>
-            <PropertyRef Name="OrderToProductId" />
-          </Key>
-          <Property Name="OrderToProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderId" Type="Int32" Nullable="false" />
-          <Property Name="productId" Type="Int32" Nullable="false" />
-          <Property Name="sizeId" Type="Int32" Nullable="false" />
-          <Property Name="price" Type="Double" Nullable="false" />
-          <Property Name="servingPreference" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Toppings" Relationship="Self.OrderToProductTopping" FromRole="OrderToProduct" ToRole="Toppings" />
-          <NavigationProperty Name="Order" Relationship="IceCreamModel.FK_OrderToProduct_Orders" FromRole="OrderToProduct" ToRole="Order" />
-        </EntityType>
         <EntityType Name="Product">
           <Key>
             <PropertyRef Name="productId" />
@@ -401,6 +411,7 @@
           <Property Name="updateDate" Type="DateTime" Precision="3" />
           <Property Name="image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Category" Relationship="Self.CategoriesProducts" FromRole="Products" ToRole="Categories" />
+          <NavigationProperty Name="OrderToProducts" Relationship="IceCreamModel.FK_OrderToProduct_Product" FromRole="Product" ToRole="OrderToProduct" />
         </EntityType>
         <EntityType Name="Size">
           <Key>
@@ -411,22 +422,6 @@
           <Property Name="categoryId" Type="Int32" Nullable="false" />
           <Property Name="price" Type="Double" Nullable="false" />
           <NavigationProperty Name="Category" Relationship="Self.SizesCategories" FromRole="Sizes" ToRole="Categories" />
-        </EntityType>
-        <EntityType Name="Topping">
-          <Key>
-            <PropertyRef Name="toppingId" />
-          </Key>
-          <Property Name="toppingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="toppingName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="categoryId" Type="Int32" Nullable="false" />
-          <Property Name="price" Type="Double" Nullable="false" />
-          <Property Name="active" Type="Boolean" Nullable="false" />
-          <Property Name="order" Type="Int32" Nullable="false" />
-          <Property Name="createDate" Type="DateTime" Precision="3" />
-          <Property Name="updateDate" Type="DateTime" Precision="3" />
-          <Property Name="image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Category" Relationship="Self.CategoriesToppings" FromRole="Toppings" ToRole="Categories" />
-          <NavigationProperty Name="OrderToProducts" Relationship="Self.OrderToProductTopping" FromRole="Toppings" ToRole="OrderToProduct" />
         </EntityType>
         <EntityType Name="ToppingsForProduct">
           <Key>
@@ -446,18 +441,6 @@
               <PropertyRef Name="categoryId" />
             </Principal>
             <Dependent Role="Products">
-              <PropertyRef Name="categoryId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="CategoriesToppings">
-          <End Role="Categories" Type="Self.Category" Multiplicity="1" />
-          <End Role="Toppings" Type="Self.Topping" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Categories">
-              <PropertyRef Name="categoryId" />
-            </Principal>
-            <Dependent Role="Toppings">
               <PropertyRef Name="categoryId" />
             </Dependent>
           </ReferentialConstraint>
@@ -522,27 +505,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="OrderToProductTopping">
-          <End Role="OrderToProduct" Type="Self.OrderToProduct" Multiplicity="*" />
-          <End Role="Toppings" Type="Self.Topping" Multiplicity="*" />
-        </Association>
         <EntityContainer Name="IceCreamEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Categories" EntityType="Self.Category" />
           <EntitySet Name="Clients" EntityType="Self.Client" />
           <EntitySet Name="DeliveriesTypes" EntityType="Self.DeliveriesType" />
           <EntitySet Name="Orders" EntityType="Self.Order" />
-          <EntitySet Name="OrderToProducts" EntityType="Self.OrderToProduct" />
           <EntitySet Name="Products" EntityType="Self.Product" />
           <EntitySet Name="Sizes" EntityType="Self.Size" />
-          <EntitySet Name="Toppings" EntityType="Self.Topping" />
           <EntitySet Name="ToppingsForProducts" EntityType="Self.ToppingsForProduct" />
           <AssociationSet Name="CategoriesProducts" Association="Self.CategoriesProducts">
             <End Role="Categories" EntitySet="Categories" />
             <End Role="Products" EntitySet="Products" />
-          </AssociationSet>
-          <AssociationSet Name="CategoriesToppings" Association="Self.CategoriesToppings">
-            <End Role="Categories" EntitySet="Categories" />
-            <End Role="Toppings" EntitySet="Toppings" />
           </AssociationSet>
           <AssociationSet Name="SizesCategories" Association="Self.SizesCategories">
             <End Role="Categories" EntitySet="Categories" />
@@ -564,14 +537,6 @@
             <End Role="DeliveriesTypes" EntitySet="DeliveriesTypes" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="OrderToProductTopping" Association="Self.OrderToProductTopping">
-            <End Role="OrderToProduct" EntitySet="OrderToProducts" />
-            <End Role="Toppings" EntitySet="Toppings" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrderToProduct_Orders" Association="IceCreamModel.FK_OrderToProduct_Orders">
-            <End Role="Order" EntitySet="Orders" />
-            <End Role="OrderToProduct" EntitySet="OrderToProducts" />
-          </AssociationSet>
           <FunctionImport Name="GetProductsCategories" ReturnType="Collection(IceCreamModel.GetProductsCategories_Result)" />
           <FunctionImport Name="GetProductsCategoriesFun" EntitySet="Categories" ReturnType="Collection(IceCreamModel.Category)" />
           <FunctionImport Name="GetProductsByCatgId" ReturnType="Collection(IceCreamModel.GetProductsByCatgId_Result)">
@@ -592,37 +557,56 @@
           <FunctionImport Name="GetCatgsToppingsForCatgProductFun" EntitySet="Categories" ReturnType="Collection(IceCreamModel.Category)">
           <Parameter Name="categoryProduct" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="GetToppingsById" ReturnType="Collection(IceCreamModel.GetToppingsById_Result)">
-          <Parameter Name="categoryId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="GetToppingsbyIdFun" EntitySet="Toppings" ReturnType="Collection(IceCreamModel.Topping)">
-          <Parameter Name="categoryId" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="GetToppingsForCatgProduct" ReturnType="Collection(IceCreamModel.GetToppingsForCatgProduct_Result)">
+          <Parameter Name="categoryId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetSizesByCatgId" ReturnType="Collection(IceCreamModel.GetSizesByCatgId_Result)">
+          <Parameter Name="categoryId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetSizesByCatgIdFun" EntitySet="Sizes" ReturnType="Collection(IceCreamModel.Size)">
+          <Parameter Name="categoryId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetCategory" ReturnType="Collection(IceCreamModel.GetCategory_Result)">
+          <Parameter Name="categoryId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetCategoryFun" EntitySet="Categories" ReturnType="Collection(IceCreamModel.Category)">
+          <Parameter Name="categoryId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetDeliveryTypes" ReturnType="Collection(IceCreamModel.GetDeliveryTypes_Result)" />
+          <FunctionImport Name="GetDeliveryTypesFun" EntitySet="DeliveriesTypes" ReturnType="Collection(IceCreamModel.DeliveriesType)" />
+          <EntitySet Name="Toppings" EntityType="IceCreamModel.Topping" />
+          <AssociationSet Name="CategoriesToppings" Association="IceCreamModel.CategoriesToppings">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Topping" EntitySet="Toppings" />
+          </AssociationSet>
+          <FunctionImport Name="GetToppingsById" ReturnType="Collection(IceCreamModel.GetToppingsById_Result1)">
+          <Parameter Name="categoryId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetToppingsByIdFun" EntitySet="Toppings" ReturnType="Collection(IceCreamModel.Topping)">
           <Parameter Name="categoryId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetToppingsForCatgProductFun" EntitySet="Toppings" ReturnType="Collection(IceCreamModel.Topping)">
           <Parameter Name="categoryId" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="GetSizesByCatgId" ReturnType="Collection(IceCreamModel.GetSizesByCatgId_Result)">
-            <Parameter Name="categoryId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="GetSizesByCatgIdFun" EntitySet="Sizes" ReturnType="Collection(IceCreamModel.Size)">
-            <Parameter Name="categoryId" Mode="In" Type="Int32" />
-          </FunctionImport>
+          <EntitySet Name="OrderToProducts" EntityType="IceCreamModel.OrderToProduct" />
+          <EntitySet Name="OrderToProductToppings" EntityType="IceCreamModel.OrderToProductTopping" />
+          <AssociationSet Name="FK_OrderToProduct_Orders" Association="IceCreamModel.FK_OrderToProduct_Orders">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderToProduct" EntitySet="OrderToProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderToProduct_Product" Association="IceCreamModel.FK_OrderToProduct_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="OrderToProduct" EntitySet="OrderToProducts" />
+          </AssociationSet>
+          <AssociationSet Name="OrderToProductToppings_OrderToproduct" Association="IceCreamModel.OrderToProductToppings_OrderToproduct">
+            <End Role="OrderToProduct" EntitySet="OrderToProducts" />
+            <End Role="OrderToProductTopping" EntitySet="OrderToProductToppings" />
+          </AssociationSet>
+          <AssociationSet Name="OrderToProductToppings_Toppings" Association="IceCreamModel.OrderToProductToppings_Toppings">
+            <End Role="Topping" EntitySet="Toppings" />
+            <End Role="OrderToProductTopping" EntitySet="OrderToProductToppings" />
+          </AssociationSet>
         </EntityContainer>
-        <Association Name="FK_OrderToProduct_Orders">
-          <End Type="IceCreamModel.Order" Role="Order" Multiplicity="1" />
-          <End Type="IceCreamModel.OrderToProduct" Role="OrderToProduct" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Order">
-              <PropertyRef Name="orderId" />
-            </Principal>
-            <Dependent Role="OrderToProduct">
-              <PropertyRef Name="OrderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <ComplexType Name="GetCategories_Result">
           <Property Type="Int32" Name="categoryId" Nullable="false" />
           <Property Type="String" Name="categoryName" Nullable="false" MaxLength="30" />
@@ -721,6 +705,138 @@
           <Property Type="Int32" Name="categoryId" Nullable="false" />
           <Property Type="Double" Name="price" Nullable="false" />
         </ComplexType>
+        <ComplexType Name="GetCategory_Result">
+          <Property Type="Int32" Name="categoryId" Nullable="false" />
+          <Property Type="String" Name="categoryName" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="categoryType" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="freeToppingsForSaucesAmount" Nullable="true" />
+          <Property Type="Int32" Name="freeToppingsForOthersAmount" Nullable="true" />
+          <Property Type="Boolean" Name="active" Nullable="false" />
+          <Property Type="Int32" Name="order" Nullable="false" />
+          <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="updateDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="image" Nullable="true" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="GetDeliveryTypes_Result">
+          <Property Type="Int32" Name="deliveryTypeId" Nullable="false" />
+          <Property Type="String" Name="deliveryDescription" Nullable="false" MaxLength="255" />
+          <Property Type="Double" Name="price" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="Topping">
+          <Key>
+            <PropertyRef Name="toppingId" />
+          </Key>
+          <Property Name="toppingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="toppingName" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="categoryId" Type="Int32" Nullable="false" />
+          <Property Name="categoryType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="price" Type="Double" Nullable="false" />
+          <Property Name="active" Type="Boolean" Nullable="false" />
+          <Property Name="order" Type="Int32" Nullable="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="updateDate" Type="DateTime" Precision="3" />
+          <Property Name="image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Category" Relationship="IceCreamModel.CategoriesToppings" FromRole="Topping" ToRole="Category" />
+          <NavigationProperty Name="OrderToProductToppings" Relationship="IceCreamModel.OrderToProductToppings_Toppings" FromRole="Topping" ToRole="OrderToProductTopping" />
+        </EntityType>
+        <Association Name="CategoriesToppings">
+          <End Type="IceCreamModel.Category" Role="Category" Multiplicity="1" />
+          <End Type="IceCreamModel.Topping" Role="Topping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="categoryId" />
+            </Principal>
+            <Dependent Role="Topping">
+              <PropertyRef Name="categoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="GetToppingsById_Result1">
+          <Property Type="Int32" Name="toppingId" Nullable="false" />
+          <Property Type="String" Name="toppingName" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="categoryId" Nullable="false" />
+          <Property Type="String" Name="categoryType" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="price" Nullable="false" />
+          <Property Type="Boolean" Name="active" Nullable="false" />
+          <Property Type="Int32" Name="order" Nullable="false" />
+          <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="updateDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="image" Nullable="true" MaxLength="255" />
+        </ComplexType>
+        <EntityType Name="OrderToProduct">
+          <Key>
+            <PropertyRef Name="OrderToProductId" />
+          </Key>
+          <Property Name="OrderToProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="productId" Type="Int32" Nullable="false" />
+          <Property Name="sizeId" Type="Int32" Nullable="false" />
+          <Property Name="price" Type="Double" Nullable="false" />
+          <Property Name="amount" Type="Int32" />
+          <NavigationProperty Name="Order" Relationship="IceCreamModel.FK_OrderToProduct_Orders" FromRole="OrderToProduct" ToRole="Order" />
+          <NavigationProperty Name="Product" Relationship="IceCreamModel.FK_OrderToProduct_Product" FromRole="OrderToProduct" ToRole="Product" />
+          <NavigationProperty Name="OrderToProductToppings" Relationship="IceCreamModel.OrderToProductToppings_OrderToproduct" FromRole="OrderToProduct" ToRole="OrderToProductTopping" />
+        </EntityType>
+        <EntityType Name="OrderToProductTopping">
+          <Key>
+            <PropertyRef Name="orderToProductId" />
+            <PropertyRef Name="toppingId" />
+          </Key>
+          <Property Name="orderToProductId" Type="Int32" Nullable="false" />
+          <Property Name="toppingId" Type="Int32" Nullable="false" />
+          <Property Name="price" Type="Double" />
+          <Property Name="amount" Type="Int32" />
+          <NavigationProperty Name="OrderToProduct" Relationship="IceCreamModel.OrderToProductToppings_OrderToproduct" FromRole="OrderToProductTopping" ToRole="OrderToProduct" />
+          <NavigationProperty Name="Topping" Relationship="IceCreamModel.OrderToProductToppings_Toppings" FromRole="OrderToProductTopping" ToRole="Topping" />
+        </EntityType>
+        <Association Name="FK_OrderToProduct_Orders">
+          <End Type="IceCreamModel.Order" Role="Order" Multiplicity="1" />
+          <End Type="IceCreamModel.OrderToProduct" Role="OrderToProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="orderId" />
+            </Principal>
+            <Dependent Role="OrderToProduct">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderToProduct_Product">
+          <End Type="IceCreamModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="IceCreamModel.OrderToProduct" Role="OrderToProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="productId" />
+            </Principal>
+            <Dependent Role="OrderToProduct">
+              <PropertyRef Name="productId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OrderToProductToppings_OrderToproduct">
+          <End Type="IceCreamModel.OrderToProduct" Role="OrderToProduct" Multiplicity="1" />
+          <End Type="IceCreamModel.OrderToProductTopping" Role="OrderToProductTopping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderToProduct">
+              <PropertyRef Name="OrderToProductId" />
+            </Principal>
+            <Dependent Role="OrderToProductTopping">
+              <PropertyRef Name="orderToProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OrderToProductToppings_Toppings">
+          <End Type="IceCreamModel.Topping" Role="Topping" Multiplicity="1" />
+          <End Type="IceCreamModel.OrderToProductTopping" Role="OrderToProductTopping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Topping">
+              <PropertyRef Name="toppingId" />
+            </Principal>
+            <Dependent Role="OrderToProductTopping">
+              <PropertyRef Name="toppingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -781,18 +897,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OrderToProducts">
-            <EntityTypeMapping TypeName="IceCreamModel.OrderToProduct">
-              <MappingFragment StoreEntitySet="OrderToProduct">
-                <ScalarProperty Name="OrderToProductId" ColumnName="OrderToProductId" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="productId" ColumnName="productId" />
-                <ScalarProperty Name="sizeId" ColumnName="sizeId" />
-                <ScalarProperty Name="price" ColumnName="price" />
-                <ScalarProperty Name="servingPreference" ColumnName="servingPreference" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="IceCreamModel.Product">
               <MappingFragment StoreEntitySet="Products">
@@ -818,21 +922,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Toppings">
-            <EntityTypeMapping TypeName="IceCreamModel.Topping">
-              <MappingFragment StoreEntitySet="Toppings">
-                <ScalarProperty Name="toppingId" ColumnName="toppingId" />
-                <ScalarProperty Name="toppingName" ColumnName="toppingName" />
-                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
-                <ScalarProperty Name="price" ColumnName="price" />
-                <ScalarProperty Name="active" ColumnName="active" />
-                <ScalarProperty Name="order" ColumnName="order" />
-                <ScalarProperty Name="createDate" ColumnName="createDate" />
-                <ScalarProperty Name="updateDate" ColumnName="updateDate" />
-                <ScalarProperty Name="image" ColumnName="image" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ToppingsForProducts">
             <EntityTypeMapping TypeName="IceCreamModel.ToppingsForProduct">
               <MappingFragment StoreEntitySet="ToppingsForProduct">
@@ -842,14 +931,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="OrderToProductTopping" TypeName="IceCreamModel.OrderToProductTopping" StoreEntitySet="OrderToProductTopping">
-            <EndProperty Name="OrderToProduct">
-              <ScalarProperty Name="OrderToProductId" ColumnName="orderToProductId" />
-            </EndProperty>
-            <EndProperty Name="Toppings">
-              <ScalarProperty Name="toppingId" ColumnName="toppingId" />
-            </EndProperty>
-          </AssociationSetMapping>
           <FunctionImportMapping FunctionImportName="GetProductsCategories" FunctionName="IceCreamModel.Store.GetProductsCategories">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IceCreamModel.GetProductsCategories_Result">
@@ -916,22 +997,6 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetCatgsToppingsForCatgProductFun" FunctionName="IceCreamModel.Store.GetCatgsToppingsForCatgProduct" />
-          <FunctionImportMapping FunctionImportName="GetToppingsById" FunctionName="IceCreamModel.Store.GetToppingsById">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IceCreamModel.GetToppingsById_Result">
-                <ScalarProperty Name="toppingId" ColumnName="toppingId" />
-                <ScalarProperty Name="toppingName" ColumnName="toppingName" />
-                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
-                <ScalarProperty Name="price" ColumnName="price" />
-                <ScalarProperty Name="active" ColumnName="active" />
-                <ScalarProperty Name="order" ColumnName="order" />
-                <ScalarProperty Name="createDate" ColumnName="createDate" />
-                <ScalarProperty Name="updateDate" ColumnName="updateDate" />
-                <ScalarProperty Name="image" ColumnName="image" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetToppingsbyIdFun" FunctionName="IceCreamModel.Store.GetToppingsById" />
           <FunctionImportMapping FunctionImportName="GetToppingsForCatgProduct" FunctionName="IceCreamModel.Store.GetToppingsForCatgProduct">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IceCreamModel.GetToppingsForCatgProduct_Result">
@@ -947,7 +1012,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetToppingsForCatgProductFun" FunctionName="IceCreamModel.Store.GetToppingsForCatgProduct" />
           <FunctionImportMapping FunctionImportName="GetSizesByCatgId" FunctionName="IceCreamModel.Store.GetSizesByCatgId">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IceCreamModel.GetSizesByCatgId_Result">
@@ -959,7 +1023,90 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetSizesByCatgIdFun" FunctionName="IceCreamModel.Store.GetSizesByCatgId" />
-        </EntityContainerMapping>
+          <FunctionImportMapping FunctionImportName="GetCategory" FunctionName="IceCreamModel.Store.GetCategory">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IceCreamModel.GetCategory_Result">
+                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+                <ScalarProperty Name="categoryName" ColumnName="categoryName" />
+                <ScalarProperty Name="categoryType" ColumnName="categoryType" />
+                <ScalarProperty Name="freeToppingsForSaucesAmount" ColumnName="freeToppingsForSaucesAmount" />
+                <ScalarProperty Name="freeToppingsForOthersAmount" ColumnName="freeToppingsForOthersAmount" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="order" ColumnName="order" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+                <ScalarProperty Name="image" ColumnName="image" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetCategoryFun" FunctionName="IceCreamModel.Store.GetCategory" />
+          <FunctionImportMapping FunctionImportName="GetDeliveryTypes" FunctionName="IceCreamModel.Store.GetDeliveryTypes">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IceCreamModel.GetDeliveryTypes_Result">
+                <ScalarProperty Name="deliveryTypeId" ColumnName="deliveryTypeId" />
+                <ScalarProperty Name="deliveryDescription" ColumnName="deliveryDescription" />
+                <ScalarProperty Name="price" ColumnName="price" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetDeliveryTypesFun" FunctionName="IceCreamModel.Store.GetDeliveryTypes" />
+          <EntitySetMapping Name="Toppings">
+            <EntityTypeMapping TypeName="IceCreamModel.Topping">
+              <MappingFragment StoreEntitySet="Toppings">
+                <ScalarProperty Name="image" ColumnName="image" />
+                <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="order" ColumnName="order" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="categoryType" ColumnName="categoryType" />
+                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+                <ScalarProperty Name="toppingName" ColumnName="toppingName" />
+                <ScalarProperty Name="toppingId" ColumnName="toppingId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetToppingsById" FunctionName="IceCreamModel.Store.GetToppingsById">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IceCreamModel.GetToppingsById_Result1">
+                <ScalarProperty Name="toppingId" ColumnName="toppingId" />
+                <ScalarProperty Name="toppingName" ColumnName="toppingName" />
+                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+                <ScalarProperty Name="categoryType" ColumnName="categoryType" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="order" ColumnName="order" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+                <ScalarProperty Name="image" ColumnName="image" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetToppingsByIdFun" FunctionName="IceCreamModel.Store.GetToppingsById" />
+          <FunctionImportMapping FunctionImportName="GetToppingsForCatgProductFun" FunctionName="IceCreamModel.Store.GetToppingsForCatgProduct" />
+          <EntitySetMapping Name="OrderToProducts">
+            <EntityTypeMapping TypeName="IceCreamModel.OrderToProduct">
+              <MappingFragment StoreEntitySet="OrderToProduct">
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="sizeId" ColumnName="sizeId" />
+                <ScalarProperty Name="productId" ColumnName="productId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="OrderToProductId" ColumnName="OrderToProductId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderToProductToppings">
+            <EntityTypeMapping TypeName="IceCreamModel.OrderToProductTopping">
+              <MappingFragment StoreEntitySet="OrderToProductTopping">
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="toppingId" ColumnName="toppingId" />
+                <ScalarProperty Name="orderToProductId" ColumnName="orderToProductId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
