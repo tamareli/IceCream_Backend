@@ -18,5 +18,13 @@ namespace Dal
             }
             return false;
         }
+        public static List<OrderToProductTopping> GetOrderToProductToppings(int orderToProductId)
+        {
+            using (IceCreamEntities db = new IceCreamEntities())
+            {
+                var toppings = db.GetToppingsForProductInOrderFun(orderToProductId);
+                return toppings.ToList<OrderToProductTopping>();
+            }
+        }
     }
 }

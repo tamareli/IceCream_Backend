@@ -8,35 +8,62 @@ namespace Dal
 {
     public class UserDal
     {
-        public static bool Register(Client u)
+        public static int Register(Client u)
         {
             using (IceCreamEntities db = new IceCreamEntities())
             {
-                db.Clients.Add(u);
-                db.SaveChanges();
-                return true;
+                var userForEmailCheck = (from c in db.Clients where c.email == u.email select c).FirstOrDefault<Client>();
+                if(userForEmailCheck == null)
+                {
+                   return AddUser(u);
+                }
             }
-            return false;
+            return 0;
+        }
+        public static int AddGuestUser(Client u)
+        {
+            using (IceCreamEntities db = new IceCreamEntities())
+            {
+                   return AddUser(u);
+            }
+        }
+
+        public static int AddUser(Client user)
+        {
+            using (IceCreamEntities db = new IceCreamEntities())
+            {     
+                    db.Clients.Add(user);
+                    db.SaveChanges();
+                    return user.clientId;     
+            }
         }
         public static Client ValidateUser(string email, string password)
         {
             using(IceCreamEntities db = new IceCreamEntities())
             {
-                var userList = from u in db.Clients select u;
-                var user = userList.FirstOrDefault(x => x.email == email && x.password == password);
-                return user;
+                var user = from u in db.Clients where u.email == email && u.password == password select u;
+                return user.FirstOrDefault();
             }
         }
-        public static Client LogIn(int id)
+        public static Client GetUser(int id)
         {
             using (IceCreamEntities db = new IceCreamEntities())
             {
-                var userList = from u in db.Clients select u;
-                var user = userList.FirstOrDefault(x => x.clientId == id);
-                return user;
+                var user = from u in db.Clients where u.clientId == id && u.password != "guestUser" select u;
+                return user.FirstOrDefault();
             }
         }
 
+        public static string GetPasswordByemail(string email)
+        {
+            using (IceCreamEntities db = new IceCreamEntities())
+            {
+                var user = from u in db.Clients where u.email == email && u.password != "guestUser" select u;
+                if (user.FirstOrDefault() != null)
+                    return user.FirstOrDefault().password;
+                else return null;
+            }
+        }
 
     }
 }

@@ -21,5 +21,23 @@ namespace Bl
             }
             return b;
         }
+        public static List<OrderToProductDto> GetOrderToProduct(int orderId)
+        {
+            List<OrderToProduct> products = OrderToProductDal.GetProductsInOrder(orderId);
+            List<OrderToProductDto> dtoProducts = new List<OrderToProductDto>();
+            for (int i = 0; i < products.Count; i++)
+            {
+                OrderToProductDto product = new OrderToProductDto(products[i]);
+                product.toppings = OrderToProductToToppingBl.GetOrderToProductToppings(products[i].OrderToProductId);
+                using (IceCreamEntities db = new IceCreamEntities())
+                {
+                    product.productName = db.Products.Where(x => x.productId == product.productId).FirstOrDefault().productName;
+                    product.sizeName = db.Sizes.Where(x => x.sizeId == product.sizeId).FirstOrDefault().sizeName;
+                    product.image = db.Products.Where(x => x.productId == product.productId).FirstOrDefault().image;
+                }
+                dtoProducts.Add(product);
+            }
+            return dtoProducts;
+        }
     }
 }

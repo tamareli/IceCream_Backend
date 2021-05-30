@@ -10,16 +10,12 @@
 namespace Dal
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Size
+    public partial class GetToppingsForProductInOrder_Result
     {
-        public int sizeId { get; set; }
-        public string sizeName { get; set; }
-        public int categoryId { get; set; }
-        public double price { get; set; }
-        public string image { get; set; }
-    
-        public virtual Category Category { get; set; }
+        public int orderToProductId { get; set; }
+        public int toppingId { get; set; }
+        public Nullable<double> price { get; set; }
+        public Nullable<int> amount { get; set; }
     }
 }

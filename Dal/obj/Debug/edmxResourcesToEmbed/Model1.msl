@@ -70,16 +70,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Sizes">
-      <EntityTypeMapping TypeName="IceCreamModel.Size">
-        <MappingFragment StoreEntitySet="Sizes">
-          <ScalarProperty Name="sizeId" ColumnName="sizeId" />
-          <ScalarProperty Name="sizeName" ColumnName="sizeName" />
-          <ScalarProperty Name="categoryId" ColumnName="categoryId" />
-          <ScalarProperty Name="price" ColumnName="price" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="ToppingsForProducts">
       <EntityTypeMapping TypeName="IceCreamModel.ToppingsForProduct">
         <MappingFragment StoreEntitySet="ToppingsForProduct">
@@ -170,17 +160,6 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="GetSizesByCatgId" FunctionName="IceCreamModel.Store.GetSizesByCatgId">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="IceCreamModel.GetSizesByCatgId_Result">
-          <ScalarProperty Name="sizeId" ColumnName="sizeId" />
-          <ScalarProperty Name="sizeName" ColumnName="sizeName" />
-          <ScalarProperty Name="categoryId" ColumnName="categoryId" />
-          <ScalarProperty Name="price" ColumnName="price" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="GetSizesByCatgIdFun" FunctionName="IceCreamModel.Store.GetSizesByCatgId" />
     <FunctionImportMapping FunctionImportName="GetCategory" FunctionName="IceCreamModel.Store.GetCategory">
       <ResultMapping>
         <ComplexTypeMapping TypeName="IceCreamModel.GetCategory_Result">
@@ -264,5 +243,66 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Sizes">
+      <EntityTypeMapping TypeName="IceCreamModel.Size">
+        <MappingFragment StoreEntitySet="Sizes">
+          <ScalarProperty Name="image" ColumnName="image" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+          <ScalarProperty Name="sizeName" ColumnName="sizeName" />
+          <ScalarProperty Name="sizeId" ColumnName="sizeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="GetSizesByCatgId" FunctionName="IceCreamModel.Store.GetSizesByCatgId">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="IceCreamModel.GetSizesByCatgId_Result1">
+          <ScalarProperty Name="sizeId" ColumnName="sizeId" />
+          <ScalarProperty Name="sizeName" ColumnName="sizeName" />
+          <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="image" ColumnName="image" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetSizesByCatgIdFun" FunctionName="IceCreamModel.Store.GetSizesByCatgId" />
+    <FunctionImportMapping FunctionImportName="GetToppingsForProductInOrder" FunctionName="IceCreamModel.Store.GetToppingsForProductInOrder">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="IceCreamModel.GetToppingsForProductInOrder_Result">
+          <ScalarProperty Name="orderToProductId" ColumnName="orderToProductId" />
+          <ScalarProperty Name="toppingId" ColumnName="toppingId" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetToppingsForProductInOrderFun" FunctionName="IceCreamModel.Store.GetToppingsForProductInOrder" />
+    <FunctionImportMapping FunctionImportName="GetProductsInOrder" FunctionName="IceCreamModel.Store.GetProductsInOrder">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="IceCreamModel.GetProductsInOrder_Result">
+          <ScalarProperty Name="OrderToProductId" ColumnName="OrderToProductId" />
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="sizeId" ColumnName="sizeId" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetProductsInOrderFun" FunctionName="IceCreamModel.Store.GetProductsInOrder" />
+    <FunctionImportMapping FunctionImportName="GetOrdersForUser" FunctionName="IceCreamModel.Store.GetOrdersForUser">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="IceCreamModel.GetOrdersForUser_Result">
+          <ScalarProperty Name="orderId" ColumnName="orderId" />
+          <ScalarProperty Name="clientId" ColumnName="clientId" />
+          <ScalarProperty Name="orderDate" ColumnName="orderDate" />
+          <ScalarProperty Name="deliveryTypeId" ColumnName="deliveryTypeId" />
+          <ScalarProperty Name="finalPrice" ColumnName="finalPrice" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetOrdersForUserFun" FunctionName="IceCreamModel.Store.GetOrdersForUser" />
   </EntityContainerMapping>
 </Mapping>

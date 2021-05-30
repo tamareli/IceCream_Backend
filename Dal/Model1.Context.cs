@@ -32,11 +32,11 @@ namespace Dal
         public virtual DbSet<DeliveriesType> DeliveriesTypes { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<Size> Sizes { get; set; }
         public virtual DbSet<ToppingsForProduct> ToppingsForProducts { get; set; }
         public virtual DbSet<Topping> Toppings { get; set; }
         public virtual DbSet<OrderToProduct> OrderToProducts { get; set; }
         public virtual DbSet<OrderToProductTopping> OrderToProductToppings { get; set; }
+        public virtual DbSet<Size> Sizes { get; set; }
     
         public virtual ObjectResult<GetProductsCategories_Result> GetProductsCategories()
         {
@@ -143,33 +143,6 @@ namespace Dal
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetToppingsForCatgProduct_Result>("GetToppingsForCatgProduct", categoryIdParameter);
         }
     
-        public virtual ObjectResult<GetSizesByCatgId_Result> GetSizesByCatgId(Nullable<int> categoryId)
-        {
-            var categoryIdParameter = categoryId.HasValue ?
-                new ObjectParameter("categoryId", categoryId) :
-                new ObjectParameter("categoryId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSizesByCatgId_Result>("GetSizesByCatgId", categoryIdParameter);
-        }
-    
-        public virtual ObjectResult<Size> GetSizesByCatgIdFun(Nullable<int> categoryId)
-        {
-            var categoryIdParameter = categoryId.HasValue ?
-                new ObjectParameter("categoryId", categoryId) :
-                new ObjectParameter("categoryId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Size>("GetSizesByCatgIdFun", categoryIdParameter);
-        }
-    
-        public virtual ObjectResult<Size> GetSizesByCatgIdFun(Nullable<int> categoryId, MergeOption mergeOption)
-        {
-            var categoryIdParameter = categoryId.HasValue ?
-                new ObjectParameter("categoryId", categoryId) :
-                new ObjectParameter("categoryId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Size>("GetSizesByCatgIdFun", mergeOption, categoryIdParameter);
-        }
-    
         public virtual ObjectResult<GetCategory_Result> GetCategory(Nullable<int> categoryId)
         {
             var categoryIdParameter = categoryId.HasValue ?
@@ -255,6 +228,114 @@ namespace Dal
                 new ObjectParameter("categoryId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Topping>("GetToppingsForCatgProductFun", mergeOption, categoryIdParameter);
+        }
+    
+        public virtual ObjectResult<GetSizesByCatgId_Result1> GetSizesByCatgId(Nullable<int> categoryId)
+        {
+            var categoryIdParameter = categoryId.HasValue ?
+                new ObjectParameter("categoryId", categoryId) :
+                new ObjectParameter("categoryId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSizesByCatgId_Result1>("GetSizesByCatgId", categoryIdParameter);
+        }
+    
+        public virtual ObjectResult<Size> GetSizesByCatgIdFun(Nullable<int> categoryId)
+        {
+            var categoryIdParameter = categoryId.HasValue ?
+                new ObjectParameter("categoryId", categoryId) :
+                new ObjectParameter("categoryId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Size>("GetSizesByCatgIdFun", categoryIdParameter);
+        }
+    
+        public virtual ObjectResult<Size> GetSizesByCatgIdFun(Nullable<int> categoryId, MergeOption mergeOption)
+        {
+            var categoryIdParameter = categoryId.HasValue ?
+                new ObjectParameter("categoryId", categoryId) :
+                new ObjectParameter("categoryId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Size>("GetSizesByCatgIdFun", mergeOption, categoryIdParameter);
+        }
+    
+        public virtual ObjectResult<GetToppingsForProductInOrder_Result> GetToppingsForProductInOrder(Nullable<int> productInOrderId)
+        {
+            var productInOrderIdParameter = productInOrderId.HasValue ?
+                new ObjectParameter("productInOrderId", productInOrderId) :
+                new ObjectParameter("productInOrderId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetToppingsForProductInOrder_Result>("GetToppingsForProductInOrder", productInOrderIdParameter);
+        }
+    
+        public virtual ObjectResult<OrderToProductTopping> GetToppingsForProductInOrderFun(Nullable<int> productInOrderId)
+        {
+            var productInOrderIdParameter = productInOrderId.HasValue ?
+                new ObjectParameter("productInOrderId", productInOrderId) :
+                new ObjectParameter("productInOrderId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OrderToProductTopping>("GetToppingsForProductInOrderFun", productInOrderIdParameter);
+        }
+    
+        public virtual ObjectResult<OrderToProductTopping> GetToppingsForProductInOrderFun(Nullable<int> productInOrderId, MergeOption mergeOption)
+        {
+            var productInOrderIdParameter = productInOrderId.HasValue ?
+                new ObjectParameter("productInOrderId", productInOrderId) :
+                new ObjectParameter("productInOrderId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OrderToProductTopping>("GetToppingsForProductInOrderFun", mergeOption, productInOrderIdParameter);
+        }
+    
+        public virtual ObjectResult<GetProductsInOrder_Result> GetProductsInOrder(Nullable<int> orderId)
+        {
+            var orderIdParameter = orderId.HasValue ?
+                new ObjectParameter("orderId", orderId) :
+                new ObjectParameter("orderId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProductsInOrder_Result>("GetProductsInOrder", orderIdParameter);
+        }
+    
+        public virtual ObjectResult<OrderToProduct> GetProductsInOrderFun(Nullable<int> orderId)
+        {
+            var orderIdParameter = orderId.HasValue ?
+                new ObjectParameter("orderId", orderId) :
+                new ObjectParameter("orderId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OrderToProduct>("GetProductsInOrderFun", orderIdParameter);
+        }
+    
+        public virtual ObjectResult<OrderToProduct> GetProductsInOrderFun(Nullable<int> orderId, MergeOption mergeOption)
+        {
+            var orderIdParameter = orderId.HasValue ?
+                new ObjectParameter("orderId", orderId) :
+                new ObjectParameter("orderId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OrderToProduct>("GetProductsInOrderFun", mergeOption, orderIdParameter);
+        }
+    
+        public virtual ObjectResult<GetOrdersForUser_Result> GetOrdersForUser(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetOrdersForUser_Result>("GetOrdersForUser", userIdParameter);
+        }
+    
+        public virtual ObjectResult<Order> GetOrdersForUserFun(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Order>("GetOrdersForUserFun", userIdParameter);
+        }
+    
+        public virtual ObjectResult<Order> GetOrdersForUserFun(Nullable<int> userId, MergeOption mergeOption)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Order>("GetOrdersForUserFun", mergeOption, userIdParameter);
         }
     }
 }

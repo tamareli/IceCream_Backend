@@ -25,24 +25,16 @@ namespace IceCream_Back
 
             if (user != null)
             {
-                 identity.AddClaim(new Claim(ClaimTypes.Role, "user"));
+                identity.AddClaim(new Claim(ClaimTypes.Role, "user"));
                 identity.AddClaim(new Claim("username", user.email));
-
-                IDictionary<string, string> data = new Dictionary<string, string>
-                {
-                 { "userId", user.userId.ToString() }
-                };
-                AuthenticationProperties properties = new AuthenticationProperties(data);
-                Microsoft.Owin.Security.AuthenticationTicket ticket = new Microsoft.Owin.Security.AuthenticationTicket(identity, properties);
-                context.Validated(ticket);
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.userId.ToString()));
+                context.Validated(identity);
             }
             else
             {
-                context.SetError("invalid_grant", "please provide different username or password");
+                context.SetError("invalid_grant", "אימייל או סיסמה שגויים");
                 return;
             }
-
-
         }
         public override Task TokenEndpoint(OAuthTokenEndpointContext context)
         {

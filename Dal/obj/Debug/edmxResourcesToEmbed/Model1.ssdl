@@ -93,6 +93,7 @@
     <Property Name="sizeName" Type="nvarchar" MaxLength="30" Nullable="false" />
     <Property Name="categoryId" Type="int" Nullable="false" />
     <Property Name="price" Type="float" Nullable="false" />
+    <Property Name="image" Type="nvarchar" MaxLength="30" />
   </EntityType>
   <EntityType Name="Toppings">
     <Key>
@@ -256,6 +257,9 @@
     <Parameter Name="categoryProduct" Type="int" Mode="In" />
   </Function>
   <Function Name="GetDeliveryTypes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="GetOrdersForUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userId" Type="int" Mode="In" />
+  </Function>
   <Function Name="GetProductById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="productId" Type="int" Mode="In" />
   </Function>
@@ -263,6 +267,9 @@
     <Parameter Name="categoryId" Type="int" Mode="In" />
   </Function>
   <Function Name="GetProductsCategories" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="GetProductsInOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="orderId" Type="int" Mode="In" />
+  </Function>
   <Function Name="GetSizesByCatgId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="categoryId" Type="int" Mode="In" />
   </Function>
@@ -271,6 +278,9 @@
   </Function>
   <Function Name="GetToppingsForCatgProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="categoryId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="GetToppingsForProductInOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="productInOrderId" Type="int" Mode="In" />
   </Function>
   <EntityContainer Name="IceCreamModelStoreContainer">
     <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />

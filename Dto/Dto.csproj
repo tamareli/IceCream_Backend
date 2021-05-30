@@ -54,6 +54,7 @@
     <Compile Include="CategoryDto.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="DeliveryTypesDto.cs" />
+    <Compile Include="EmailDto.cs" />
     <Compile Include="OrderDto.cs" />
     <Compile Include="OrderToProductDto.cs" />
     <Compile Include="OrderToProductToppingDto.cs" />

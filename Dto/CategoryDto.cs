@@ -31,6 +31,7 @@ namespace Dto
             order = catg.order;
             createDate = catg.createDate;
             updateDate = catg.updateDate;
+            image = catg.image;
         }
         public CategoryDto()
         {

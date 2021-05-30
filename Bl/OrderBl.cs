@@ -18,5 +18,22 @@ namespace Bl
             return b&&c;
 
         }
+        public static List<OrderDto> getOrders(int userId)
+        {
+            //categories from dataBase
+            List<Order> orders = OrderDal.GetOrdersForUser(userId);
+            List<OrderDto> dtoOrders = new List<OrderDto>();
+            for (int i = 0; i < orders.Count; i++)
+            {
+                OrderDto order = new OrderDto(orders[i]);
+                using (IceCreamEntities db = new IceCreamEntities())
+                {
+                    order.deliveryTypeName = db.DeliveriesTypes.Where(x => x.deliveryTypeId == order.deliveryTypeId).FirstOrDefault().deliveryDescription;
+                }
+                order.orderItems = OrderToProductBl.GetOrderToProduct(orders[i].orderId);
+                dtoOrders.Add(order);
+            }
+            return dtoOrders;
+        }
     }
 }

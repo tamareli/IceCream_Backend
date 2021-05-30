@@ -6,6 +6,9 @@ using System.Net.Http;
 using System.Web.Http;
 using Dto;
 using Bl;
+using System.Web;
+using System.Security.Claims;
+
 
 namespace IceCream_Back.Controllers
 {
@@ -16,22 +19,49 @@ namespace IceCream_Back.Controllers
         [Route("register")]
         public IHttpActionResult Register([FromBody] UserDto user)
         {
-            bool b = UserBl.Register(user);
-            if (b)
-                return Ok();
-            return BadRequest();
+            if (ModelState.IsValid)
+            {
+                int userId = UserBl.Register(user);
+                if (userId!=0)
+                    return Ok(userId);
+                return BadRequest("אימייל קיים כבר במערכת");
+            }
+            else
+            {
+                return BadRequest("נא מלא את הפרטים ללא שגיאות");
+            }
+
+        }
+        [HttpPost]
+        [Route("addGuestUser")]
+        public IHttpActionResult AddGuestUser([FromBody] UserDto user)
+        {
+            if (ModelState.IsValid)
+            {
+                int userId = UserBl.AddGuestUser(user);
+                if (userId != 0)
+                    return Ok(userId);
+                return BadRequest();
+            }
+            else
+            {
+                return BadRequest("נא מלא את הפרטים ללא שגיאות");
+            }
         }
 
         [Authorize]
         [HttpGet]
-        [Route("login/{id}")]
-        public IHttpActionResult LogIn(int id)
+        [Route("GetUser")]
+        public IHttpActionResult GetUser()
         {
-            var user = UserBl.LogIn(id);
-            if (user != null)
+            var identity = (ClaimsIdentity)User.Identity;
+            var userId = identity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = UserBl.GetUser(Convert.ToInt32(userId));
+            if(user!= null)
                 return Ok(user);
-            else
-                return BadRequest();
+            return BadRequest();
         }
+
+
     }
 }

@@ -13,6 +13,8 @@ namespace Dto
         public string sizeName { get; set; }
         public int categoryId { get; set; }
         public double price { get; set; }
+        public string image { get; set; }
+
 
         public SizeDto()
         {
@@ -24,6 +26,7 @@ namespace Dto
             sizeName = s.sizeName;
             categoryId = s.categoryId;
             price = s.price;
+            image = s.image;
 
         }
 

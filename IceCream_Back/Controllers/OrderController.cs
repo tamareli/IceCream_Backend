@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Web.Http;
 using Dto;
 using Bl;
+using System.Security.Claims;
+
 
 namespace IceCream_Back.Controllers
 {
@@ -16,10 +18,25 @@ namespace IceCream_Back.Controllers
         [Route("order")]
         public IHttpActionResult addOrder([FromBody] OrderDto order)
         {
+
             bool b = OrderBl.addOrder(order);
             if (b)
                 return Ok();
             return BadRequest();
         }
-    }
+
+        [Authorize]
+        [HttpGet]
+        [Route("orders")]
+        public IHttpActionResult getOrders()
+        {
+            var identity = (ClaimsIdentity)User.Identity;
+            var userId = identity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            List<OrderDto> orders = new List<OrderDto>();
+            orders = OrderBl.getOrders(Convert.ToInt32(userId));
+            if (orders != null)
+                return Ok(orders);
+            return BadRequest();
+        }
+    }  
 }

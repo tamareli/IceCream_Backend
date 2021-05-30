@@ -18,5 +18,13 @@ namespace Dal
             }
             return false;
         }
+        public static List<Order> GetOrdersForUser(int userId)
+        {
+            using (IceCreamEntities db = new IceCreamEntities())
+            {
+                var orders = db.GetOrdersForUserFun(userId);
+                return orders.ToList<Order>();
+            }
+        }
     }
 }
